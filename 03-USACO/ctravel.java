@@ -15,33 +15,37 @@ public class ctravel{
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
         int T = Integer.parseInt(st.nextToken());
-	ArrayList<Integer[]> trees = new ArrayList<Integer[]>();
-	
-	for(int i=0; i<N; i++){
+	boolean[][] trees = new boolean[N][M];
+
+        for(int i=0; i<N; i++){
             s=f.readLine();
 	    for(int j=0; j<M; j++){
-		if(f.charAt(j)=='*'){
-		    int[] coors = new int[2];
-		    coors[0]=i;
-		    coors[1]=j;
-		    a.add(coors);
+		if(s.charAt(j)=='*'){
+                    trees[i][j]=true;
 		}
 	    }
 	}
-	
-	/*int c=0;
-	String s = f.readLine();
-	while(s!=null){
-	    StringTokenizer st = new StringTokenizer(s);
-	    int i1 = Integer.parseInt(st.nextToken());    // first integer
-	    int i2 = Integer.parseInt(st.nextToken());    // second integer
-	    c+=i1+i2;
-	    s=f.readLine();
-	}
+        
+        s = f.readLine();
+        StringTokenizer st2 = new StringTokenizer(s);
+        int startx = Integer.parseInt(st2.nextToken());
+        int starty = Integer.parseInt(st2.nextToken());
+        int endx = Integer.parseInt(st2.nextToken());
+        int endy = Integer.parseInt(st2.nextToken());
+        
+        int[][][] ways = new int[N+2][M+2][T+1]; //3d array: ways to get to NxM grid (with tree border to make function simpler) after 0 to T seconds
+        ways[startx][starty][0]=1; //at 0 seconds, everything 0 except the starting spot is 1
+        for(int t=1; t<=T; t++){
+            for(int n=1; n<=N; n++){
+                for(int m=1; m<=M; m++){
+                    if(!trees[n-1][m-1]){
+                        ways[n][m][t]=ways[n-1][m][t-1]+ways[n+1][m][t-1]+ways[n][m-1][t-1]+ways[n][m+1][t-1];
+                    }
+                }
+            }
+        }
 
-	out.println(c);                               // output result
-	*/
-	
+	out.println(ways[endx][endy][T]);             // output result
 	out.close();                                  // close the output file
 	System.exit(0);                               // don't omit this!
     }

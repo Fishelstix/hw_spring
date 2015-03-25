@@ -2,18 +2,12 @@ import java.io.*;
 import java.util.*;
 
 public class myStack<E>{
-    //implements Iterable<E>{
     private Node<E> top;
     
     public myStack(){
 	top = new Node<E>();
     }
-    
-    /*public ListIterator<E> iterator(){
-	LLit<E> i = new LLit<E>(l.getNext());
-	return i;
-	}*/
-    
+
     public void push(E s){
 	Node<E> tmp = new Node<E>(s);
 	tmp.setPrev(top);
@@ -25,7 +19,7 @@ public class myStack<E>{
 	Node<E> tmp = top;
 	top=tmp.getPrev();
 	top.setNext(null);
-	return tmp;
+	return tmp.getData();
     }
 
     public boolean empty(){

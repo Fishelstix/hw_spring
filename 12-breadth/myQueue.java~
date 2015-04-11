@@ -1,0 +1,36 @@
+import java.io.*;
+import java.util.*;
+
+public class myQueue<E>{
+    private Node<E> top,bottom;
+
+    public void enqueue(Node<E> data){
+	if(bottom==null){
+	    bottom = data;
+            top = bottom;
+	}else{
+	    data.setPrev(top);
+	    top.setNext(data);
+	    top=data;
+	}
+    }
+    
+    public Node<E> dequeue(){
+	Node<E> tmp = bottom;
+	bottom=tmp.getNext();
+	bottom.setPrev(null);
+	return tmp;
+    }
+
+    public E head(){
+	return bottom.getData();
+    }
+
+    public String toString(){
+	String s = "FRONT: " + bottom;
+	for (Node<E> tmp = bottom.getNext(); tmp!=null; tmp=tmp.getNext()){
+	    s += " --> " + tmp;
+	}
+	return s;
+    }
+}

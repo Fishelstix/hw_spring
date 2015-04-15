@@ -1,0 +1,41 @@
+public class Node<E>{
+    private E data;
+    private Node<E> next, prev, seed;
+    
+    public Node(E s){
+        seed = null;
+	data = s;
+	next = null;
+	prev = null;
+    }
+    public Node(Node<E> s, E d){
+        seed = s;
+	data = d;
+	next = null;
+	prev = null;
+    }
+    public void setData(E s){
+	data = s;
+    }
+    public E getData(){
+	return data;
+    }
+    public void setNext(Node<E> n){
+	next = n;
+    }
+    public Node<E> getNext(){
+	return next;
+    }
+    public void setPrev(Node<E> n){
+	prev = n;
+    }
+    public Node<E> getPrev(){
+	return prev;
+    }
+    public Node<E> getSeed(){
+        return seed;
+    }
+    public String toString(){
+	return ""+data;
+    }
+}

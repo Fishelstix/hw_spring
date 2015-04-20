@@ -3,9 +3,10 @@ import java.util.*;
 
 public class Maze {
     private char[][] board;
+    private int[] endCoors;
     private int maxX;
     private int maxY;
-    private myQueue<int[]> frontier;
+    private myQueue<coors> frontier;
     
     private char path='#';
     private char wall=' ';
@@ -25,6 +26,7 @@ public class Maze {
         maxX=40;
         maxY=20;
         board = new char[maxX][maxY];
+        endCoors = new int[2];
         try {
             Scanner sc = new Scanner(new File("maze.dat"));
             int j=0;
@@ -32,11 +34,16 @@ public class Maze {
                 String line = sc.nextLine();
                 for (int i=0;i<maxX;i++){
                     board[i][j] = line.charAt(i);
+		    if(line.charAt(i)=='$'){
+			endCoors[0] = i;
+			endCoors[1] = j;
+                        System.out.println("WOOOO");
+		    }
                 }
                 j++;
             }
         }catch (Exception e){}
-        frontier = new myQueue<int[]>();
+        frontier = new myQueue<coors>();
     }
     
     public String toString(){
@@ -50,19 +57,23 @@ public class Maze {
         return s;
     }
 
+    public int getPriority(coors c){
+	return Math.abs(endCoors[0]-c.getX())+Math.abs(endCoors[1]-c.getY());
+    }
+
     public void solve(){
         while(!solved){
-            Node<int[]> n = frontier.dequeue();
-            int[] coors = n.getData();
-            int x = coors[0];
-            int y = coors[1];
+            Node<coors> n = frontier.dequeue();
+            coors c = n.getData();
+            int x = c.getX();
+            int y = c.getY();
 
             if (board[x][y]==exit){
-                Node<int[]> X = n;
+                Node<coors> X = n;
                 while(X!=null){
-                    int[] Xcoors = X.getData();
-                    int Xx = Xcoors[0];
-                    int Xy = Xcoors[1];
+                    coors Xcoors = X.getData();
+                    int Xx = Xcoors.getX();
+                    int Xy = Xcoors.getY();
                     board[Xx][Xy] = way;
                     X = X.getSeed();
                 }
@@ -71,26 +82,30 @@ public class Maze {
             
             if (board[x+1][y]==path || board[x+1][y]==exit){
                 if(board[x+1][y]==path) board[x+1][y]=me;
-                int[] data = {x+1,y};
-                Node<int[]> add = new Node<int[]>(n,data);
+                coors data = new coors(x+1,y);
+		int p = getPriority(data);
+                Node<coors> add = new Node<coors>(n,data,p);
                 frontier.enqueue(add);
             }
             if (board[x-1][y]==path || board[x-1][y]==exit){
                 if(board[x-1][y]==path) board[x-1][y]=me;
-                int[] data = {x-1,y};
-                Node<int[]> add = new Node<int[]>(n,data);
+                coors data = new coors(x-1,y);
+		int p = getPriority(data);
+                Node<coors> add = new Node<coors>(n,data,p);
                 frontier.enqueue(add);
             }
             if (board[x][y+1]==path || board[x][y+1]==exit){
                 if(board[x][y+1]==path) board[x][y+1]=me;
-                int[] data = {x,y+1};
-                Node<int[]> add = new Node<int[]>(n,data);
+                coors data = new coors(x,y+1);
+		int p = getPriority(data);
+                Node<coors> add = new Node<coors>(n,data,p);
                 frontier.enqueue(add);
             }
             if (board[x][y-1]==path || board[x][y-1]==exit){
                 if(board[x][y-1]==path) board[x][y-1]=me;
-                int[] data = {x,y-1};
-                Node<int[]> add = new Node<int[]>(n,data);
+                coors data = new coors(x,y-1);
+		int p = getPriority(data);
+                Node<coors> add = new Node<coors>(n,data,p);
                 frontier.enqueue(add);
             }
             
@@ -101,9 +116,10 @@ public class Maze {
     }
     
     public void start(){
-        int[] st = {1,1};
+        coors st = new coors(1,1);
         board[1][1]=me;
-        Node<int[]> n = new Node<int[]>(st);
+        System.out.println(endCoors[0]);
+        Node<coors> n = new Node<coors>(st,getPriority(st));
         frontier.enqueue(n);
         solve();
     }

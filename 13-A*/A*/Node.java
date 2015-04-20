@@ -1,16 +1,19 @@
 public class Node<E>{
     private E data;
+    private int priority;
     private Node<E> next, prev, seed;
     
-    public Node(E s){
+    public Node(E d, int p){
         seed = null;
-	data = s;
+	data = d;
+	priority = p;
 	next = null;
 	prev = null;
     }
-    public Node(Node<E> s, E d){
+    public Node(Node<E> s, E d, int p){
         seed = s;
 	data = d;
+	priority = p;
 	next = null;
 	prev = null;
     }
@@ -34,6 +37,12 @@ public class Node<E>{
     }
     public Node<E> getSeed(){
         return seed;
+    }
+    public void setPriority(int i){
+	priority = i;
+    }
+    public int getPriority(){
+	return priority;
     }
     public String toString(){
 	return ""+data;

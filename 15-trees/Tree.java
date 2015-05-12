@@ -92,5 +92,37 @@ public class Tree{
 	ret += toStringHelper(t.getRight, ret);
 	return ret;
     }
+
+    public Integer maxValue(Node t){
+	if(t == null) return Integer.MIN_VALUE;
+	return Math.max(t.getData(),Math.max(maxValue(t.getRight),maxValue(t.getLeft)));
+    }
     
+    public int height(Node t){
+	if(t == null) return 0;
+	int l = height(t.getLeft());
+	int r = height(t.getRight());
+	return Math.max(l+1,r+1);
+    }
+
+    public void splitDupes(Node t){
+	if(t == null) return;
+	if(t.getRight().getData().equals(t.getData())){
+	    Node temp = new Node(t.getData() -1);
+	    temp.setRight(t.getRight());
+	    t.setRight(temp);
+	}
+	if(t.getLeft().getData().equals(t.getData())){
+	    Node temp = new Node(t.getData() -1);
+	    temp.setLeft(t.getLeft());
+	    t.setLeft(temp);
+	}
+	splitDupes(t.getRight());
+	splitDupes(t.getLeft());
+    }
+
+    public int longest(Node t){
+	if(t == null) return 0;
+	return Math.max(height(t.getLeft())+height(t.getRight())+1,Math.max(longest(t.getLeft),longest(t.getRight())));
+    }
 }
